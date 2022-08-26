@@ -1,0 +1,19 @@
+.card {
+  max-width: 320px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+.actions {
+  float: right;
+}
+.textAvatar {
+  background-color: #b388ff;
+  height: 180px;
+}
+
+.textAvatarText {
+  font-size: 8rem;
+  align-self: center;
+    margin-bottom: 0px;
+  color: #6200ea;
+}

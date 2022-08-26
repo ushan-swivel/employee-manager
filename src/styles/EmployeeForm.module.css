@@ -1,0 +1,39 @@
+.container {
+  padding: 0 2rem;
+}
+.addForm {
+  max-width: 90%;
+  margin: auto;
+  margin-top: 80px;
+}
+
+@media only screen and (min-width: 940px) {
+  .addForm {
+    max-width: 50%;
+  }
+}
+@media only screen and (max-width: 890px) {
+  .addForm {
+    max-width: 80%;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .addForm {
+    max-width: 100%;
+  }
+}
+.wrapperCard {
+  padding: 40px;
+  border-radius: 22px;
+}
+
+.listViewButton {
+  float: right;
+}
+
+.saveButton {
+  float: right;
+}
+.alert{
+  width: "100%";
+}
