@@ -108,7 +108,22 @@ export const employeeSlice = createSlice({
     statusUpdating: "waiting",
   } as IEmployeeState,
 
-  reducers: {},
+  reducers: {
+    searchByName: (state, action) => {
+      // The object you return is the full state object update in your reducer
+      return {
+        ...state,
+        empListFiltered: [...state.empList].filter(
+          (emp: IEmployee) =>
+            emp.firstName
+              .toLowerCase()
+              .includes(action.payload.toLowerCase()) ||
+            emp.lastName.toLowerCase().includes(action.payload.toLowerCase()) ||
+            emp.email.toLowerCase().includes(action.payload.toLowerCase())
+        ),
+      };
+    },
+  },
 
   extraReducers: (builder) => {
     //Hydrate state with wrapper
@@ -159,7 +174,6 @@ export const employeeSlice = createSlice({
       console.log(action.payload);
       state.statusUpdating = "success";
       state.messageUpdating = "Successfully updated Employee!";
-      state.empList.push(action.payload);
     });
     builder.addCase(updateEmployees.rejected, (state, action: any) => {
       state.messageAdding = action.payload ?? "Server Error";
@@ -172,6 +186,9 @@ export const employeeSlice = createSlice({
       state.empList = state.empList.filter(
         (emp: IEmployee) => emp.id !== action.payload.id
       );
+      state.empListFiltered = state.empListFiltered?.filter(
+        (emp: IEmployee) => emp.id !== action.payload.id
+      );
     });
     builder.addCase(deleteEmployees.rejected, (state, action: any) => {
       state.messageAdding = action.payload ?? "Server Error";
@@ -179,6 +196,8 @@ export const employeeSlice = createSlice({
     });
   },
 });
+
+export const { searchByName } = employeeSlice.actions;
 
 export const selectEmployeeState = () => (state: AppState) =>
   state?.[employeeSlice.name];

@@ -1,25 +1,29 @@
 import {
   Alert,
   AlertTitle,
+  Box,
   Button,
   CircularProgress,
   Fab,
   Grid,
+  InputAdornment,
+  TextField,
 } from "@mui/material";
-import { GridView } from "@mui/icons-material";
+import { GridView, Search } from "@mui/icons-material";
 import type { NextPage } from "next";
 import { useSelector } from "react-redux";
 import {
   deleteEmployees,
   fetchEmployees,
+  searchByName,
   selectEmployeeState,
-} from "../../redux/slices/employee.slice";
+} from "@/redux/slices/employee.slice";
 
 import { useAppDispatch, wrapper } from "@/redux/store";
 import styles from "@/styles/EmployeeList.module.css";
 import { EmployeeTable, AlertDialog, EmployeeGrid } from "@/components/index";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const List: NextPage = (props) => {
   //Next Router
@@ -29,7 +33,7 @@ const List: NextPage = (props) => {
   // console.log("State on render", useStore().getState(), props);
 
   //Access state from redux employee state
-  const { statusListFetching, messageLoading, empList } = useSelector(
+  const { statusListFetching, messageLoading, empListFiltered } = useSelector(
     selectEmployeeState()
   );
 
@@ -39,6 +43,8 @@ const List: NextPage = (props) => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   // Keep Track of delete employee id
   const [deleteId, setDeleteId] = useState<string>();
+  // Keep Track of search Query
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   //Redux dispatch function
   const dispatch = useAppDispatch();
@@ -55,6 +61,12 @@ const List: NextPage = (props) => {
     setDeleteId("");
     setShowDialog(false);
   };
+
+  //Handle Search Query
+  useEffect(() => {
+    dispatch(searchByName(searchQuery));
+  }, [searchQuery]);
+
   return (
     <div className={styles.container}>
       <h1>Employee List</h1>
@@ -79,6 +91,37 @@ const List: NextPage = (props) => {
         </Fab>
       </div>
 
+      <Grid
+        container
+        spacing={0}
+        direction="row"
+        alignItems="center"
+        justifyContent="center"
+        width="100%"
+        className={styles.searchBox}
+      >
+        <Grid item xs={6}>
+          <TextField
+            id="input-with-icon-textfield"
+            placeholder="Search"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search />
+                </InputAdornment>
+              ),
+            }}
+            value={searchQuery}
+            onChange={(ev) => {
+              setSearchQuery(ev.target.value);
+            }}
+            fullWidth
+            inputProps={{ style: { backgroundColor: "white" } }}
+            variant="standard"
+          />
+        </Grid>
+      </Grid>
+
       {statusListFetching == "failed" && (
         <Grid
           container
@@ -99,12 +142,12 @@ const List: NextPage = (props) => {
         <CircularProgress />
       ) : gridMode ? (
         <EmployeeGrid
-          data={empList}
+          data={empListFiltered ?? []}
           onDeleteClicked={(id) => handleDeleteEmployee(id)}
         />
       ) : (
         <EmployeeTable
-          data={empList}
+          data={empListFiltered ?? []}
           onDeleteClicked={(id) => handleDeleteEmployee(id)}
         />
       )}

@@ -2,6 +2,7 @@ import { IEmployee } from "src/interfaces/IEmployee.interface";
 
 interface IEmployeeState {
   empList: any[];
+  empListFiltered?: any[];
   employee?: IEmployee;
   messageLoading: string;
   statusListFetching: "success" | "failed" | "pending" | "waiting";

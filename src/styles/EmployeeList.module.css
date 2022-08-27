@@ -1,8 +1,12 @@
 .container {
   padding: 0 2rem;
+  margin-bottom: 40px;
 }
 .actionsWrapper {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   float: right;
   width: fit-content;
+}
+.searchBox{
+  margin-bottom: 20px;
 }
